@@ -2,7 +2,7 @@ from fastapi import HTTPException, Depends
 import fastapi
 from sqlalchemy.orm import Session
 from src.database.models import Ticket
-from src.database.pydantic_models import Ticket as DbTicket, TicketCreate, TicketId
+from src.database.pydantic_models import Ticket as DbTicket, TicketCreate, ForId
 from typing import List
 from src.database.database import get_db
 
@@ -53,7 +53,7 @@ async def update_ticket(id: int, ticket: TicketCreate, db: Session = Depends(get
     return db_user
 
 
-@router.delete("/delete/{id}", response_model=TicketId)
+@router.delete("/delete/{id}", response_model=ForId)
 async def delete_ticket(id: int, db: Session = Depends(get_db)):
     db_user = db.query(Ticket).filter(Ticket.id == id).first()
 

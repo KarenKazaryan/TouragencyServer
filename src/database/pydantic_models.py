@@ -12,7 +12,7 @@ class CountryCreate(Country):
     pass
 
 
-class CountryId(BaseModel):
+class ForId(BaseModel):
     id: int
 
 
@@ -25,10 +25,6 @@ class Tour(BaseModel):
 
 class TourCreate(Tour):
     pass
-
-
-class TourId(BaseModel):
-    id: int
 
 
 class User(BaseModel):
@@ -47,10 +43,6 @@ class UserCreate(User):
     pass
 
 
-class UserId(BaseModel):
-    id: int
-
-
 class Ticket(BaseModel):
     id: int
     tour_id: int
@@ -61,7 +53,3 @@ class Ticket(BaseModel):
 
 class TicketCreate(Ticket):
     pass
-
-
-class TicketId(BaseModel):
-    id: int

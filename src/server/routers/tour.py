@@ -2,7 +2,7 @@ from fastapi import HTTPException, Depends
 import fastapi
 from sqlalchemy.orm import Session
 from src.database.models import Tour
-from src.database.pydantic_models import Tour as DbTour, TourCreate, TourId
+from src.database.pydantic_models import Tour as DbTour, TourCreate, ForId
 from typing import List
 from src.database.database import get_db
 
@@ -52,7 +52,7 @@ async def update_tour(id: int, tour: TourCreate, db: Session = Depends(get_db)) 
     return db_user
 
 
-@router.delete("/delete/{id}", response_model=TourId)
+@router.delete("/delete/{id}", response_model=ForId)
 async def delete_tour(id: int, db: Session = Depends(get_db)):
     db_user = db.query(Tour).filter(Tour.id == id).first()
 

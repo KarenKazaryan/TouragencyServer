@@ -2,7 +2,7 @@ from fastapi import HTTPException, Depends
 import fastapi
 from sqlalchemy.orm import Session
 from src.database.models import User
-from src.database.pydantic_models import UserCreate, User as DbUser, UserId
+from src.database.pydantic_models import UserCreate, User as DbUser, ForId
 from typing import List
 from src.database.database import get_db
 
@@ -53,7 +53,7 @@ async def update_user(id: int, user: UserCreate, db: Session = Depends(get_db)) 
     return db_user
 
 
-@router.delete("/delete/{id}", response_model=UserId)
+@router.delete("/delete/{id}", response_model=ForId)
 async def delete_user(id: int, db: Session = Depends(get_db)):
     db_user = db.query(User).filter(User.id == id).first()
 
