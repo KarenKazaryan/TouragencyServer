@@ -19,6 +19,16 @@ async def create_user(user: UserCreate, db: Session = Depends(get_db)) -> User:
     return db_user
 
 
+@router.post("/login", response_model=DbUser)
+async def login(phone: int, password: str, db: Session = Depends(get_db)):
+    db_user = db.query(User).filter(User.phone == phone, User.password == password).first()
+
+    if db_user is None:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    return db_user
+
+
 @router.get("/read", response_model=List[DbUser])
 async def get_users(db: Session = Depends(get_db)) -> List[User]:
     db_users = db.query(User).all()
@@ -31,7 +41,7 @@ async def get_user(id: int, db: Session = Depends(get_db)) -> User:
 
     if db_user is None:
         raise HTTPException(status_code=404, detail="User not found")
-    
+
     return db_user
 
 
