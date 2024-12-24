@@ -2,7 +2,7 @@ from fastapi import HTTPException, Depends
 import fastapi
 from sqlalchemy.orm import Session
 from src.database.models import Country
-from src.database.pydantic_models import Country as DbCountry, CountryCreate, ForId
+from src.database.pydantic_models import Country as DbCountry, Country as CountryCreate, ForId
 from typing import List
 from src.database.database import get_db
 
@@ -30,7 +30,7 @@ async def get_country(id: int, db: Session = Depends(get_db)) -> Country:
     db_user = db.query(Country).filter(Country.id == id).first()
 
     if db_user is None:
-        raise HTTPException(status_code=404, detail="User not found")
+        raise HTTPException(status_code=404, detail="Country not found")
 
     return db_user
 
@@ -40,7 +40,7 @@ async def update_country(id: int, country: CountryCreate, db: Session = Depends(
     db_user = db.query(Country).filter(Country.id == id).first()
 
     if db_user is None:
-        raise HTTPException(status_code=404, detail="User not found")
+        raise HTTPException(status_code=404, detail="Country not found")
 
     db_user.name = country.name
 
@@ -55,7 +55,7 @@ async def delete_country(id: int, db: Session = Depends(get_db)):
     db_user = db.query(Country).filter(Country.id == id).first()
 
     if db_user is None:
-        raise HTTPException(status_code=404, detail="User not found")
+        raise HTTPException(status_code=404, detail="Country not found")
 
     db.delete(db_user)
     db.commit()

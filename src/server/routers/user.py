@@ -2,7 +2,7 @@ from fastapi import HTTPException, Depends
 import fastapi
 from sqlalchemy.orm import Session
 from src.database.models import User
-from src.database.pydantic_models import UserCreate, User as DbUser, ForId
+from src.database.pydantic_models import User as UserCreate, User as DbUser, ForId
 from typing import List
 from src.database.database import get_db
 
@@ -26,7 +26,7 @@ async def get_users(db: Session = Depends(get_db)) -> List[User]:
 
 
 @router.get("/read/{id}", response_model=DbUser)
-async def get_users(id: int, db: Session = Depends(get_db)) -> User:
+async def get_user(id: int, db: Session = Depends(get_db)) -> User:
     db_user = db.query(User).filter(User.id == id).first()
 
     if db_user is None:

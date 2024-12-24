@@ -2,7 +2,7 @@ from fastapi import HTTPException, Depends
 import fastapi
 from sqlalchemy.orm import Session
 from src.database.models import Ticket
-from src.database.pydantic_models import Ticket as DbTicket, TicketCreate, ForId
+from src.database.pydantic_models import Ticket as DbTicket, Ticket as TicketCreate, ForId
 from typing import List
 from src.database.database import get_db
 
@@ -20,7 +20,7 @@ async def create_tour(ticket: TicketCreate, db: Session = Depends(get_db)) -> Ti
 
 
 @router.get("/read", response_model=List[DbTicket])
-async def get_ticket(db: Session = Depends(get_db)) -> List[Ticket]:
+async def get_tickets(db: Session = Depends(get_db)) -> List[Ticket]:
     db_users = db.query(Ticket).all()
     return db_users
 
@@ -30,7 +30,7 @@ async def get_ticket(id: int, db: Session = Depends(get_db)) -> Ticket:
     db_user = db.query(Ticket).filter(Ticket.id == id).first()
 
     if db_user is None:
-        raise HTTPException(status_code=404, detail="User not found")
+        raise HTTPException(status_code=404, detail="Ticket not found")
 
     return db_user
 
@@ -40,7 +40,7 @@ async def update_ticket(id: int, ticket: TicketCreate, db: Session = Depends(get
     db_user = db.query(Ticket).filter(Ticket.id == id).first()
 
     if db_user is None:
-        raise HTTPException(status_code=404, detail="User not found")
+        raise HTTPException(status_code=404, detail="Ticket not found")
 
     db_user.tour_id = ticket.tour_id
     db_user.date_start = ticket.date_start
@@ -58,7 +58,7 @@ async def delete_ticket(id: int, db: Session = Depends(get_db)):
     db_user = db.query(Ticket).filter(Ticket.id == id).first()
 
     if db_user is None:
-        raise HTTPException(status_code=404, detail="User not found")
+        raise HTTPException(status_code=404, detail="Ticket not found")
 
     db.delete(db_user)
     db.commit()

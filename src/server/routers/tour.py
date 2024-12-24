@@ -2,7 +2,7 @@ from fastapi import HTTPException, Depends
 import fastapi
 from sqlalchemy.orm import Session
 from src.database.models import Tour
-from src.database.pydantic_models import Tour as DbTour, TourCreate, ForId
+from src.database.pydantic_models import Tour as DbTour, Tour as TourCreate, ForId
 from typing import List
 from src.database.database import get_db
 
@@ -30,7 +30,7 @@ async def get_tour(id: int, db: Session = Depends(get_db)) -> Tour:
     db_user = db.query(Tour).filter(Tour.id == id).first()
 
     if db_user is None:
-        raise HTTPException(status_code=404, detail="User not found")
+        raise HTTPException(status_code=404, detail="Tour not found")
 
     return db_user
 
@@ -40,7 +40,7 @@ async def update_tour(id: int, tour: TourCreate, db: Session = Depends(get_db)) 
     db_user = db.query(Tour).filter(Tour.id == id).first()
 
     if db_user is None:
-        raise HTTPException(status_code=404, detail="User not found")
+        raise HTTPException(status_code=404, detail="Tour not found")
 
     db_user.country_id = tour.country_id
     db_user.hours = tour.hours
@@ -57,7 +57,7 @@ async def delete_tour(id: int, db: Session = Depends(get_db)):
     db_user = db.query(Tour).filter(Tour.id == id).first()
 
     if db_user is None:
-        raise HTTPException(status_code=404, detail="User not found")
+        raise HTTPException(status_code=404, detail="Tour not found")
 
     db.delete(db_user)
     db.commit()
