@@ -2,7 +2,7 @@ from fastapi import HTTPException, Depends
 import fastapi
 from sqlalchemy.orm import Session
 from src.database.models import Ticket
-from src.database.pydantic_models import Ticket as DbTicket, Ticket as TicketCreate, ForId
+from src.database.pydantic_models import Ticket as DbTicket, ForId
 from typing import List
 from src.database.database import get_db
 
@@ -10,7 +10,7 @@ router = fastapi.APIRouter(prefix='/ticket', tags=['Ticket'])
 
 
 @router.post("/create", response_model=DbTicket)
-async def create_tour(ticket: TicketCreate, db: Session = Depends(get_db)) -> Ticket:
+async def create_tour(ticket: DbTicket, db: Session = Depends(get_db)) -> Ticket:
     db_user = Ticket(tour_id=ticket.tour_id, date_start=ticket.date_start, date_end=ticket.date_end, user_id=ticket.user_id)
     db.add(db_user)
     db.commit()
@@ -35,8 +35,8 @@ async def get_ticket(id: int, db: Session = Depends(get_db)) -> Ticket:
     return db_user
 
 
-@router.put("/update/{id}", response_model=TicketCreate)
-async def update_ticket(id: int, ticket: TicketCreate, db: Session = Depends(get_db)) -> Ticket:
+@router.put("/update/{id}", response_model=DbTicket)
+async def update_ticket(id: int, ticket: DbTicket, db: Session = Depends(get_db)) -> Ticket:
     db_user = db.query(Ticket).filter(Ticket.id == id).first()
 
     if db_user is None:

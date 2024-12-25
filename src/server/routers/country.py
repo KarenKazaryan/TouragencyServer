@@ -2,7 +2,7 @@ from fastapi import HTTPException, Depends
 import fastapi
 from sqlalchemy.orm import Session
 from src.database.models import Country
-from src.database.pydantic_models import Country as DbCountry, Country as CountryCreate, ForId
+from src.database.pydantic_models import Country as DbCountry, ForId
 from typing import List
 from src.database.database import get_db
 
@@ -10,7 +10,7 @@ router = fastapi.APIRouter(prefix='/country', tags=['Country'])
 
 
 @router.post("/create", response_model=DbCountry)
-async def create_country(country: CountryCreate, db: Session = Depends(get_db)) -> Country:
+async def create_country(country: DbCountry, db: Session = Depends(get_db)) -> Country:
     db_user = Country(name=country.name)
     db.add(db_user)
     db.commit()
@@ -35,8 +35,8 @@ async def get_country(id: int, db: Session = Depends(get_db)) -> Country:
     return db_user
 
 
-@router.put("/update/{id}", response_model=CountryCreate)
-async def update_country(id: int, country: CountryCreate, db: Session = Depends(get_db)) -> Country:
+@router.put("/update/{id}", response_model=DbCountry)
+async def update_country(id: int, country: DbCountry, db: Session = Depends(get_db)) -> Country:
     db_user = db.query(Country).filter(Country.id == id).first()
 
     if db_user is None:
