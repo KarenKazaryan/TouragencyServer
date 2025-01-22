@@ -1,4 +1,5 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, Date
+
 from src.database.database import Base
 
 
@@ -33,4 +34,3 @@ class Ticket(Base):
     date_start = Column(Date)
     date_end = Column(Date)
     user_id = Column(Integer, ForeignKey("user.id"))
-

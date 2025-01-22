@@ -1,10 +1,12 @@
-from fastapi import HTTPException, Depends
+from typing import List
+
 import fastapi
+from fastapi import HTTPException, Depends
 from sqlalchemy.orm import Session
+
+from src.database.database import get_db
 from src.database.models import Tour
 from src.database.pydantic_models import Tour as DbTour, ForId
-from typing import List
-from src.database.database import get_db
 
 router = fastapi.APIRouter(prefix='/tour', tags=['Tour'])
 

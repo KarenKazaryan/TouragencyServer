@@ -1,8 +1,9 @@
-from fastapi import FastAPI
-import uvicorn
 import fastapi
-from src.server.routers.router import routers
+import uvicorn
+from fastapi import FastAPI
+
 from src.database.database import Base, engine
+from src.server.routers.router import routers
 
 app = FastAPI()
 
