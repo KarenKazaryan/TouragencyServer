@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 
 from src.database.database import get_db
 from src.database.models import User
-from src.database.pydantic_models import User as DbUser, ForId
+from src.database.pydantic_models import User as DbUser
 
 router = fastapi.APIRouter(prefix='/user', tags=['User'])
 
@@ -65,7 +65,7 @@ async def update_user(id: int, user: DbUser, db: Session = Depends(get_db)) -> U
     return db_user
 
 
-@router.delete("/delete/{id}", response_model=ForId)
+@router.delete("/delete/{id}", response_model=bool)
 async def delete_user(id: int, db: Session = Depends(get_db)):
     db_user = db.query(User).filter(User.id == id).first()
 
@@ -75,4 +75,4 @@ async def delete_user(id: int, db: Session = Depends(get_db)):
     db.delete(db_user)
     db.commit()
 
-    return db_user
+    return True

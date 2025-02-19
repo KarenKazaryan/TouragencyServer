@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 
 from src.database.database import get_db
 from src.database.models import Tour
-from src.database.pydantic_models import Tour as DbTour, ForId
+from src.database.pydantic_models import Tour as DbTour
 
 router = fastapi.APIRouter(prefix='/tour', tags=['Tour'])
 
@@ -54,7 +54,7 @@ async def update_tour(id: int, tour: DbTour, db: Session = Depends(get_db)) -> T
     return db_user
 
 
-@router.delete("/delete/{id}", response_model=ForId)
+@router.delete("/delete/{id}", response_model=bool)
 async def delete_tour(id: int, db: Session = Depends(get_db)):
     db_user = db.query(Tour).filter(Tour.id == id).first()
 
@@ -64,4 +64,4 @@ async def delete_tour(id: int, db: Session = Depends(get_db)):
     db.delete(db_user)
     db.commit()
 
-    return db_user
+    return True

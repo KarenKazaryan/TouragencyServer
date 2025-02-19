@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 
 from src.database.database import get_db
 from src.database.models import Country
-from src.database.pydantic_models import Country as DbCountry, ForId
+from src.database.pydantic_models import Country as DbCountry
 
 router = fastapi.APIRouter(prefix='/country', tags=['Country'])
 
@@ -52,7 +52,7 @@ async def update_country(id: int, country: DbCountry, db: Session = Depends(get_
     return db_user
 
 
-@router.delete("/delete/{id}", response_model=ForId)
+@router.delete("/delete/{id}", response_model=bool)
 async def delete_country(id: int, db: Session = Depends(get_db)):
     db_user = db.query(Country).filter(Country.id == id).first()
 
@@ -62,4 +62,4 @@ async def delete_country(id: int, db: Session = Depends(get_db)):
     db.delete(db_user)
     db.commit()
 
-    return db_user
+    return True

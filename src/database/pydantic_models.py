@@ -8,10 +8,6 @@ class Country(BaseModel):
     name: str
 
 
-class ForId(BaseModel):
-    id: int
-
-
 class Tour(BaseModel):
     id: int
     country_id: int

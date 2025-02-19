@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 
 from src.database.database import get_db
 from src.database.models import Ticket
-from src.database.pydantic_models import Ticket as DbTicket, ForId
+from src.database.pydantic_models import Ticket as DbTicket
 
 router = fastapi.APIRouter(prefix='/ticket', tags=['Ticket'])
 
@@ -56,7 +56,7 @@ async def update_ticket(id: int, ticket: DbTicket, db: Session = Depends(get_db)
     return db_user
 
 
-@router.delete("/delete/{id}", response_model=ForId)
+@router.delete("/delete/{id}", response_model=bool)
 async def delete_ticket(id: int, db: Session = Depends(get_db)):
     db_user = db.query(Ticket).filter(Ticket.id == id).first()
 
@@ -66,4 +66,4 @@ async def delete_ticket(id: int, db: Session = Depends(get_db)):
     db.delete(db_user)
     db.commit()
 
-    return db_user
+    return True
